@@ -1,0 +1,121 @@
+Student: Victor De Los Santos
+
+Part One
+
+mysql> drop function if exists expmult;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create function expmult(a int, b int)
+    -> returns int deterministic
+    -> begin
+    -> declare c int;
+    -> set c=(a*b);
+    -> return c;
+    -> end;
+    -> //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> select expmult(5,8);
++--------------+
+| expmult(5,8) |
++--------------+
+|           40 |
++--------------+
+1 row in set (0.00 sec)
+
+
+Part Two
+
+victor@victor-VirtualBox ~/Desktop/part2 $ gcc $(mysql_config --cflags) -shared -fPIC -o parttwoarea.so parttwoarea.c
+victor@victor-VirtualBox ~/Desktop/part2 $ sudo cp parttwoarea.so /usr/lib/mysql/plugin/parttwoarea.so
+mysql> create function parttwoarea
+    -> returns real
+    -> soname "parttwoarea.so";
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select parttwoarea(5,0);
++------------------+
+| parttwoarea(5,0) |
++------------------+
+|               79 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select parttwoarea(7,0);
++------------------+
+| parttwoarea(7,0) |
++------------------+
+|              154 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select parttwoarea(12,0);
++-------------------+
+| parttwoarea(12,0) |
++-------------------+
+|               452 |
++-------------------+
+1 row in set (0.00 sec)
+
+
+
+Part Four
+
+call samename("Elliott");
+call samename("Bouloucos");
+call samename("Mori");
+
+mysql> call averagesalary("d001");
++-------------+
+| avg(salary) |
++-------------+
+|  71913.2000 |
++-------------+
+1 row in set (4.10 sec)
+
+Query OK, 0 rows affected (4.10 sec)
+
+mysql> call averagesalary("d002");
++-------------+
+| avg(salary) |
++-------------+
+|  70489.3649 |
++-------------+
+1 row in set (3.89 sec)
+
+Query OK, 0 rows affected (3.89 sec)
+
+mysql> call averagesalary("d003");
++-------------+
+| avg(salary) |
++-------------+
+|  55574.8794 |
++-------------+
+1 row in set (3.94 sec)
+
+Query OK, 0 rows affected (3.94 sec)
+
+mysql> call countgender('M');
++----------+
+| count(*) |
++----------+
+|   179973 |
++----------+
+1 row in set (0.05 sec)
+
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> call countgender('F');
++----------+
+| count(*) |
++----------+
+|   120051 |
++----------+
+1 row in set (0.05 sec)
+
+Query OK, 0 rows affected (0.05 sec)
+
+
+
